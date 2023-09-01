@@ -20,20 +20,20 @@ function QuestionsContextProvider(props) {
         return shuffledArray; 
     }
     
-    function updateAnswerState(id) {
+    function updateAnswerState(answerId, questionId) {
         setQuestionsData(prevQuestionsData => {
-           return prevQuestionsData.map(item => {
-                const newAnswersArray = item.answers.map(answer => {
-                    return answer.answerId === id ? {...answer, isSelected : !answer.isSelected} : answer
-                })
-
-                return {
-                    ...item,
-                    answers : newAnswersArray
-                }
-            })
-
-        })
+            return prevQuestionsData.map(item => {
+                 const newAnswersArray = item.answers.map(answer => {
+                     return answer.answerId === answerId ? {...answer, isSelected : !answer.isSelected} : answer
+                 })
+ 
+                 return {
+                     ...item,
+                     answers : newAnswersArray
+                 }
+             })
+ 
+         })
     }
 
 
@@ -52,8 +52,9 @@ function QuestionsContextProvider(props) {
                     }
                 ))
                 const answersWithState = enrichedDatawithId.map(item => {
+                    const questionId = item.id
                     const answersUpdated = item.answers.map(answer => {
-                        return {answer : answer, isSelected : false, answerId: uuidv4()}
+                        return {answer : answer, isSelected : false, answerId: uuidv4(), questionId: questionId}
                     })
                     return {
                         ...item,
