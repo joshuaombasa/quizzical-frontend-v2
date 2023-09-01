@@ -11,10 +11,10 @@ export default function UnitQuestion({ question }) {
     const answersElements = question.answers.map(answer => (
         <span
             key={answer.answerId}
-            onClick={() => updateAnswerState(answer.answerId)}
+            onClick={() => updateAnswerState(answer.answerId, answer.questionId)}
             style={
                 {
-                    backgroundColor: answer.isSelected === true ? "#D6DBF5" : "",
+                    backgroundColor: answer.isSelected  === true ? "#D6DBF5" : "",
                     border: answer.isSelected === true ? "0.794px solid white" : "0.794px solid #4D5B9E"
                 }
             }
