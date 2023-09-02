@@ -7,10 +7,9 @@ const questionsContext = createContext()
 
 function QuestionsContextProvider(props) {
 
+    const [questionsData, setQuestionsData] = React.useState([])
 
-    const [questionsData, setQuestionsData] = React.useState(
-        JSON.parse(localStorage.getItem('quizData') || '[]')
-    )
+    const [isQuizOver, setIsQuizOver] = React.useState(false)
 
     function shuffleArray(array) {
         const shuffledArray = [...array];
@@ -39,7 +38,6 @@ function QuestionsContextProvider(props) {
                        }
             })
 
-
             return question.id === questionId ? {
                 ...question,
                 answers: newAnswersArray
@@ -49,8 +47,16 @@ function QuestionsContextProvider(props) {
         localStorage.setItem('quizData', JSON.stringify(updatedState))
     }
 
+    function startNewQuiz() {
+        setIsQuizOver(true)
+        console.log('restart')
+    }
+
+    // isQuizOver === true && window.location.reload()
+
 
     React.useEffect(() => {
+        setIsQuizOver(false)
         const getQuestions = async () => {
             try {
                 const res = await fetch(URL)
@@ -80,7 +86,7 @@ function QuestionsContextProvider(props) {
                         answers: answersUpdated
                     }
                 })
-
+                setQuestionsData(answersWithState)
                 localStorage.setItem('quizData', JSON.stringify(answersWithState))
             } catch (error) {
                 console.log(error)
@@ -88,12 +94,18 @@ function QuestionsContextProvider(props) {
         }
 
         getQuestions()
-    }, [])
+    }, [isQuizOver])
 
 
     return (
         <questionsContext.Provider
-            value={{ questionsData: questionsData, updateAnswerState: updateAnswerState }}
+            value={
+                    { 
+                        questionsData: questionsData, 
+                        updateAnswerState: updateAnswerState,
+                        startNewQuiz : startNewQuiz
+                    }
+                   }
         >
             {props.children}
         </questionsContext.Provider>
