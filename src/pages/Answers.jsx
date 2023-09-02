@@ -6,7 +6,7 @@ export default function Answers() {
 
     // const { questionsData } = useContext(questionsContext)
     const [questionsData, setQuestionsData] = React.useState(
-        JSON.parse(localStorage.getItem('quizData') || '[]')
+        () =>  JSON.parse(localStorage.getItem('quizData') || '[]')
     )
 
     
