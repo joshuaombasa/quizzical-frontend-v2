@@ -3,19 +3,16 @@ import { questionsContext } from "../context/QuestionContext";
 export default function UnitQuestion({ question }) {
    
     const { updateAnswerState } = useContext(questionsContext)
-    // const selectedStyle = {
-    //     backgroundColor: isSelected === true ? "#D6DBF5" : "",
-    //     border: isSelected === true ? "none" : "0.794px solid #4D5B9E"
-    // }
 
     const answersElements = question.answers.map(answer => (
+
         <span
             key={answer.answerId}
             onClick={() => updateAnswerState(answer.answerId, answer.questionId)}
             style={
                 {
-                    backgroundColor: answer.isSelected  === true ? "#D6DBF5" : "",
-                    border: answer.isSelected === true ? "0.794px solid white" : "0.794px solid #4D5B9E"
+                    backgroundColor:  answer.answerId === answer.questionId  ? "#D6DBF5" : "",
+                    border: answer.answerId === answer.questionId  ? "0.794px solid white" : "0.794px solid #4D5B9E"
                 }
             }
         >
