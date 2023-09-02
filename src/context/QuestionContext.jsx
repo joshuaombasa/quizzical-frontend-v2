@@ -1,4 +1,5 @@
 import React, { createContext } from "react";
+import { json } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 const URL = "https://opentdb.com/api.php?amount=10&category=18&difficulty=hard&type=multiple"
 
@@ -6,38 +7,47 @@ const questionsContext = createContext()
 
 function QuestionsContextProvider(props) {
 
-    
-    const [questionsData, setQuestionsData] = React.useState([])
+
+    const [questionsData, setQuestionsData] = React.useState(
+        JSON.parse(localStorage.getItem('quizData') || '[]')
+    )
 
     function shuffleArray(array) {
-        const shuffledArray = [...array]; 
-    
+        const shuffledArray = [...array];
+
         for (let i = shuffledArray.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
         }
 
-        return shuffledArray; 
+        return shuffledArray;
     }
 
-   
-    
-    function updateAnswerState(answerId, questionId) {
-        
-        setQuestionsData(prevQuestionsData => {
-            return prevQuestionsData.map(question => {
 
-                 const newAnswersArray = question.answers.map(answer => {
-                     return answer.answerId === answerId ? {...answer, isSelected : !answer.isSelected, answerId: answer.questionId} : {...answer,answerId: uuidv4()}
-                 })
- 
-                 return question.id === questionId ? {
-                     ...question,
-                     answers : newAnswersArray
-                 } : question
-             })
- 
-         })
+
+    function updateAnswerState(answerId, questionId) {
+        const updatedState = questionsData.map(question => {
+
+            const newAnswersArray = question.answers.map(answer => {
+                return answer.answerId === answerId ? 
+                     { ...answer, 
+                        isSelected: answer.isSelected === true ? false : true, 
+                        answerId: answer.questionId 
+                      } : 
+                      { ...answer, 
+                        isSelected : false,
+                        answerId: uuidv4() 
+                       }
+            })
+
+
+            return question.id === questionId ? {
+                ...question,
+                answers: newAnswersArray
+            } : question
+        })
+        setQuestionsData(updatedState)
+        localStorage.setItem('quizData', JSON.stringify(updatedState))
     }
 
 
@@ -58,15 +68,21 @@ function QuestionsContextProvider(props) {
                 const answersWithState = enrichedDatawithId.map(item => {
                     const questionId = item.id
                     const answersUpdated = item.answers.map(answer => {
-                        return {answer : answer, isSelected : false, answerId: uuidv4(), questionId: questionId}
+                        return {
+                            answer: answer,
+                            isSelected: false,
+                            answerId: uuidv4(),
+                            questionId: questionId,
+                            isCorrect: answer === item.correct_answer ? true : false
+                        }
                     })
                     return {
                         ...item,
-                        answers : answersUpdated
+                        answers: answersUpdated
                     }
                 })
-                
-                setQuestionsData(answersWithState)
+
+                localStorage.setItem('quizData', JSON.stringify(answersWithState))
             } catch (error) {
                 console.log(error)
             }
@@ -75,11 +91,10 @@ function QuestionsContextProvider(props) {
         getQuestions()
     }, [])
 
-    // console.log(questionsData)
 
     return (
-        <questionsContext.Provider 
-           value={{ questionsData: questionsData, updateAnswerState: updateAnswerState }}
+        <questionsContext.Provider
+            value={{ questionsData: questionsData, updateAnswerState: updateAnswerState }}
         >
             {props.children}
         </questionsContext.Provider>
