@@ -11,7 +11,8 @@ export default function UnitQuestion({ question }) {
             style={
                 {
                     backgroundColor:  answer.isCorrect ||  answer.isSelected && answer.isCorrect ? "#94D7A2" : answer.isSelected && !answer.isCorrect ? "#F8BCBC" : "",
-                    border:  answer.isCorrect || answer.isSelected  ? "0.794px solid white" : "0.794px solid #4D5B9E"
+                    border:  answer.isCorrect || answer.isSelected  ? "0.794px solid white" : "0.794px solid #4D5B9E",
+                    
                 }
             }
         >
