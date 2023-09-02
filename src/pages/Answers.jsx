@@ -4,7 +4,12 @@ import { questionsContext } from "../context/QuestionContext";
 import UnitQuestionWithAnswer from "../components/UnitQuestionWithAnswer";
 export default function Answers() {
 
-    const { questionsData } = useContext(questionsContext)
+    // const { questionsData } = useContext(questionsContext)
+    const [questionsData, setQuestionsData] = React.useState(
+        JSON.parse(localStorage.getItem('quizData') || '[]')
+    )
+
+    
 
     let answersElements
 
@@ -20,3 +25,5 @@ export default function Answers() {
         </div>
     )
 }
+
+// {questionsData.length > 0 && answersElements}
