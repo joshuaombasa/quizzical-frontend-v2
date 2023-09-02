@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { questionsContext } from "../context/QuestionContext";
 import UnitQuestion from "../components/UnitQuestion";
 
@@ -15,10 +16,12 @@ export default function Questions() {
 
 
     return (
-        <div className="questions--container">
-            {/* className="wrapper" */}
-            <div >
-                {questionsData.length > 0 &&  questionElements }
+        <div className="wrapper" >
+            <div className="questions--container" >
+                {questionsData.length > 0 && questionElements}
+                <div className="dashboard--container">
+                    <Link to="/answers" className="play--again--btn">Check answers</Link>
+                </div>
             </div>
         </div>
     )
