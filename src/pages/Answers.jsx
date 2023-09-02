@@ -5,7 +5,7 @@ import { questionsContext } from "../context/QuestionContext";
 import UnitQuestionWithAnswer from "../components/UnitQuestionWithAnswer";
 export default function Answers() {
 
-    // const { questionsData } = useContext(questionsContext)
+    const { startNewQuiz } = useContext(questionsContext)
     const [questionsData, setQuestionsData] = React.useState(
         () => JSON.parse(localStorage.getItem('quizData') || '[]')
     )
@@ -27,7 +27,6 @@ export default function Answers() {
 
     if (flatcorrectAnswers.length > 0) {
         correctAnswersArray = flatcorrectAnswers.filter(answer => answer.isSelected && answer.isCorrect)
-        console.log(correctAnswersArray.length)
     }
 
     let answersElements
@@ -43,8 +42,12 @@ export default function Answers() {
             <div className="questions--container">
                 {questionsData.length > 0 && answersElements}
                 <div className="dashboard--container">
-                    <p className="score--text">You scored 3/5 correct answers</p>
-                    <Link to="/questions" className="play--again--btn">Play again</Link>
+                    <p className="score--text">You scored {correctAnswersArray.length}/10 correct answers</p>
+                    <Link 
+                        to="/questions" 
+                        className="play--again--btn"
+                        onClick={startNewQuiz}
+                    >Play again</Link>
                 </div>
             </div>
         </div>
