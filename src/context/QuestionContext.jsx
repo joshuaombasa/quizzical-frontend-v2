@@ -6,7 +6,7 @@ const questionsContext = createContext()
 
 function QuestionsContextProvider(props) {
 
-
+    
     const [questionsData, setQuestionsData] = React.useState([])
 
     function shuffleArray(array) {
@@ -16,21 +16,25 @@ function QuestionsContextProvider(props) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
         }
-    
+
         return shuffledArray; 
     }
+
+   
     
     function updateAnswerState(answerId, questionId) {
+        
         setQuestionsData(prevQuestionsData => {
-            return prevQuestionsData.map(item => {
-                 const newAnswersArray = item.answers.map(answer => {
-                     return answer.answerId === answerId ? {...answer, isSelected : !answer.isSelected} : answer
+            return prevQuestionsData.map(question => {
+
+                 const newAnswersArray = question.answers.map(answer => {
+                     return answer.answerId === answerId ? {...answer, isSelected : !answer.isSelected, answerId: answer.questionId} : {...answer,answerId: uuidv4()}
                  })
  
-                 return {
-                     ...item,
+                 return question.id === questionId ? {
+                     ...question,
                      answers : newAnswersArray
-                 }
+                 } : question
              })
  
          })
@@ -61,7 +65,7 @@ function QuestionsContextProvider(props) {
                         answers : answersUpdated
                     }
                 })
-                console.log(answersWithState)
+                
                 setQuestionsData(answersWithState)
             } catch (error) {
                 console.log(error)
