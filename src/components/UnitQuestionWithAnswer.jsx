@@ -8,11 +8,10 @@ export default function UnitQuestion({ question }) {
 
         <span
             key={answer.answerId}
-            onClick={() => updateAnswerState(answer.answerId, answer.questionId)}
             style={
                 {
-                    backgroundColor:  answer.answerId === answer.questionId  ? "#D6DBF5" : "",
-                    border: answer.answerId === answer.questionId  ? "0.794px solid white" : "0.794px solid #4D5B9E"
+                    backgroundColor:  answer.isCorrect ||  answer.isSelected && answer.isCorrect ? "#94D7A2" : answer.isSelected && !answer.isCorrect ? "#F8BCBC" : "",
+                    border:  answer.isCorrect || answer.isSelected  ? "0.794px solid white" : "0.794px solid #4D5B9E"
                 }
             }
         >
