@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { questionsContext } from "../context/QuestionContext";
 
 import UnitQuestionWithAnswer from "../components/UnitQuestionWithAnswer";
@@ -6,10 +7,28 @@ export default function Answers() {
 
     // const { questionsData } = useContext(questionsContext)
     const [questionsData, setQuestionsData] = React.useState(
-        () =>  JSON.parse(localStorage.getItem('quizData') || '[]')
+        () => JSON.parse(localStorage.getItem('quizData') || '[]')
     )
 
-    
+    const allAnswers = []
+
+    if (questionsData.length > 0) {
+        for (let i = 0; i < questionsData.length; i++) {
+            allAnswers.push(questionsData[i].answers)
+        }
+    }
+
+    let flatcorrectAnswers
+    if (allAnswers.length > 0) {
+        flatcorrectAnswers = allAnswers.flat()
+    }
+
+    let correctAnswersArray
+
+    if (flatcorrectAnswers.length > 0) {
+        correctAnswersArray = flatcorrectAnswers.filter(answer => answer.isSelected && answer.isCorrect)
+        console.log(correctAnswersArray.length)
+    }
 
     let answersElements
 
@@ -20,10 +39,15 @@ export default function Answers() {
     }
 
     return (
-        <div className="questions--container answers--container">
-            {questionsData.length > 0 && answersElements}
+        <div className="wrapper">
+            <div className="questions--container">
+                {questionsData.length > 0 && answersElements}
+                <div className="dashboard--container">
+                    <p className="score--text">You scored 3/5 correct answers</p>
+                    <Link to="/questions" className="play--again--btn">Play again</Link>
+                </div>
+            </div>
         </div>
     )
 }
 
-// {questionsData.length > 0 && answersElements}
