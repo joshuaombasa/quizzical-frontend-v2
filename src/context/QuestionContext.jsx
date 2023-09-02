@@ -24,7 +24,6 @@ function QuestionsContextProvider(props) {
     }
 
 
-
     function updateAnswerState(answerId, questionId) {
         const updatedState = questionsData.map(question => {
 
